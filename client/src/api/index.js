@@ -10,5 +10,7 @@ API.interceptors.request.use((req) => {
     return req;
   });
 
+export const fetchPosts = () => API.get('/posts');
+export const createPost = (newPost) => API.post('/posts',newPost);
 export const signIn = (FormData) => API.post('/user/signin', FormData);
 export const signUp = (FormData) => API.post('/user/signup', FormData);

@@ -1,48 +1,33 @@
 import React, { useState, useEffect } from 'react';
-import {
-    Avatar,
-    Button,
-    Paper,
-    Grid,
-    Typography,
-    Container,
-  } from "@material-ui/core";
+import { Container, Grow, Grid } from '@material-ui/core';
 import { useDispatch } from 'react-redux';
-import useStyles from "./styles";
-import { useNavigate } from 'react-router'
+
+import { getPosts } from '../../actions/posts';
+import Posts from '../Posts/Posts';
+import Form from '../Form/Form';
 
 const Home = () => {
-  const navigate = useNavigate();
-    const classes = useStyles();
-    const dispatch = useDispatch();
-    const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')));
+  const [currentId, setCurrentId] = useState(0);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    const token = user?.token;
-    //JWT
-    setUser(JSON.parse(localStorage.getItem('profile')));
+    dispatch(getPosts());
+  }, [currentId, dispatch]);
 
-  }, []);
-  const logOut = () => {
-    dispatch({type : 'LOGOUT'});
-    navigate('/auth');
-    setUser(null);
-  };
-    return (
-        <div>
-                      {user?.result.email}
-                      <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-            onClick={logOut}
-          >
-            Logout
-          </Button>
-        </div>
-    );
+  return (
+    <Grow in>
+      <Container>
+        <Grid container justify="space-between" alignItems="stretch" spacing={3}>
+          <Grid item xs={12} sm={7}>
+            <Posts setCurrentId={setCurrentId} />
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <Form currentId={currentId} setCurrentId={setCurrentId} />
+          </Grid>
+        </Grid>
+      </Container>
+    </Grow>
+  );
 };
 
 export default Home;
